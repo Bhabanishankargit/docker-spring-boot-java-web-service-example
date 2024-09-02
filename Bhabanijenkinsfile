@@ -1,0 +1,34 @@
+pipeline {
+    agent none
+    tools {
+        maven 'rupa_maven_3.9.8'
+    }
+    stages {
+        stage('Bhabani-git-clone') {
+            agent any
+            steps {
+                echo "Dp is checking GitHub"
+                git url: 'https://github.com/Bhabanishankargit/docker-spring-boot-java-web-service-example.git'
+            }
+        }
+        stage('Bhabani-maven-build') {
+            agent any
+            steps {
+                echo "DP let's start building"
+                sh 'mvn clean package'
+            }
+        }
+        stage('Bhabani-docker-build') {
+            agent any
+            steps {
+                sh 'docker build -t love -f Bhabanidockerfile .'
+            }
+        }
+        stage('Bhabani-run-cont') {
+            agent any
+            steps {
+                sh 'docker run -d --name roopa -p 8081:8080 love'
+            }
+        }
+    }
+}
